@@ -1,4 +1,4 @@
-export type SpotifyPlaylistTrack = {
+export type SpotifyTrack = {
   added_at: string;
   added_by: {
     external_urls: {
