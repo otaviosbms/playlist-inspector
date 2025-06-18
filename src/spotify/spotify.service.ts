@@ -18,7 +18,7 @@ export class SpotifyService {
         this.SPOTIFY_API_URL = this.config.getOrThrow<string>('SPOTIFY_API_URL');
     }
 
-    async getSpotifyAccessToken() {
+    private async getSpotifyAccessToken() {
         const response: any = await axios.post(
             this.SPOTIFY_TOKEN_URL,
             'grant_type=client_credentials',
@@ -34,9 +34,25 @@ export class SpotifyService {
         return response.data.access_token;
     }
 
-    extractPlaylistId(playlistUrl: string) {
+    private extractPlaylistId(playlistUrl: string) {
         const match: RegExpMatchArray | null = playlistUrl.match(/playlist\/([a-zA-Z0-9]+)(\?.*)?/);
         return match ? match[1] : null;
+    }
+
+    async getPlaylist(playlistUrl: string): Promise<any> {
+        const playlistId: string | null = this.extractPlaylistId(playlistUrl);
+        if (!playlistId) {
+            throw new Error('Invalid Spotify playlist URL');
+        }
+
+        const token: string = await this.getSpotifyAccessToken();
+        const url = `${this.SPOTIFY_API_URL}/playlists/${playlistId}`;
+
+        const response = await axios.get(url, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        return response.data;
     }
 
     async getPlaylistTracks(playlistUrl: string): Promise<SpotifyPlaylistTrack[]> {
@@ -59,7 +75,6 @@ export class SpotifyService {
             url = response.data.next
         }
 
-        console.log(tracksList[0])
         return tracksList.reverse()
     }
 
