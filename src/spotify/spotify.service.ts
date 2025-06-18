@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
-import { SpotifyPlaylistTrack } from '../types/tracks';
+import { SpotifyTrack } from '../types/spotifyTracks';
 
 @Injectable()
 export class SpotifyService {
@@ -55,10 +55,10 @@ export class SpotifyService {
         return response.data;
     }
 
-    async getPlaylistTracks(playlistUrl: string): Promise<SpotifyPlaylistTrack[]> {
+    async getPlaylistTracks(playlistUrl: string): Promise<SpotifyTrack[]> {
         const playlistId: string | null = this.extractPlaylistId(playlistUrl)
         const token: string = await this.getSpotifyAccessToken()
-        const tracksList: SpotifyPlaylistTrack[] = [];
+        const tracksList: SpotifyTrack[] = [];
         let url: string = `${this.SPOTIFY_API_URL}/playlists/${playlistId}/tracks`;
 
         while (url) {
@@ -66,7 +66,7 @@ export class SpotifyService {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            response.data.items.forEach((item: SpotifyPlaylistTrack) => {
+            response.data.items.forEach((item: SpotifyTrack) => {
                 if (item.track) {
                     tracksList.push(item)
                 }
