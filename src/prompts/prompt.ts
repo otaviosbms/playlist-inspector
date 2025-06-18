@@ -25,6 +25,7 @@ Sua tarefa é restrita a:
    OBS: NUNCA MUDE ESTE JSON. NÃO ADICIONE E NEM REMOVA CHAVES
 
       {
+         "analysis": (um texto de até no MAXIMO 500 caracteres falando o que foi observado na playlist)
          "recommendations": {
             "artists": [
                {
@@ -48,7 +49,7 @@ Sua tarefa é restrita a:
             ]
          }
       }
-         
+
    - Regras adicionais:
 	   Adicione 5 recomendações para cada item.
    
