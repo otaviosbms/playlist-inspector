@@ -1,13 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 
 <head>
-    <title>Resultado</title>
+    <meta charset="UTF-8">
+    <title>Resultado da Análise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-    <h1>Olá, {{name}}!</h1>
-    <a href="/">Voltar</a>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center px-4">
+
+    <div class="w-full max-w-4xl p-8 bg-gray-800 rounded-2xl shadow-2xl text-center mt-5 mb-5">
+
+        <!-- Imagem da Playlist -->
+        <div class="mb-6">
+            <img class="mx-auto rounded-xl shadow-lg" src="{{ result.image }}" alt="Imagem da Playlist" />
+        </div>
+
+        <!-- Nome e dono da playlist -->
+        <div class="mb-4">
+            <h2 class="text-3xl font-bold text-green-400">{{ result.playlistName }}</h2>
+            <p class="text-sm text-gray-400">por {{ result.playlistOwner }} - {{result.playlistFollowers}} seguidores
+            <p class="text-sm text-gray-400">{{ result.playlistDescription }}</p>
+            </p>
+        </div>
+
+        <!-- Análise -->
+        <div class="text-left text-gray-200 mb-6">
+            <h3 class="text-xl font-semibold mb-2">Resumo da Análise:</h3>
+            <p class="leading-relaxed">{{ result.analysis }}</p>
+        </div>
+
+        <!-- Recomendações -->
+        <div class="text-left text-gray-100 space-y-8">
+
+            <!-- Artistas recomendados -->
+            <div>
+                <h3 class="text-2xl font-bold text-yellow-400 mb-3">Artistas Recomendados</h3>
+                <ul class="space-y-2">
+                    {{#each result.recommendations.artists}}
+                    <li class="bg-gray-700 p-4 rounded-lg shadow-md">
+                        <p><span class="font-bold text-green-300">{{this.name}}</span></p>
+                        <p class="text-sm text-gray-300">{{this.reason}}</p>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+
+            <!-- Álbuns recomendados -->
+            <div>
+                <h3 class="text-2xl font-bold text-yellow-400 mb-3">Álbuns Recomendados</h3>
+                <ul class="space-y-2">
+                    {{#each result.recommendations.albums}}
+                    <li class="bg-gray-700 p-4 rounded-lg shadow-md">
+                        <p><span class="font-bold text-green-300">{{this.title}}</span> — {{this.artist}}</p>
+                        <p class="text-sm text-gray-300">{{this.reason}}</p>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+
+            <!-- Músicas recomendadas -->
+            <div>
+                <h3 class="text-2xl font-bold text-yellow-400 mb-3">Músicas Recomendadas</h3>
+                <ul class="space-y-2">
+                    {{#each result.recommendations.songs}}
+                    <li class="bg-gray-700 p-4 rounded-lg shadow-md">
+                        <p><span class="font-bold text-green-300">{{this.title}}</span> — {{this.artist}}</p>
+                        <p class="text-sm text-gray-300">{{this.reason}}</p>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Botão Voltar -->
+        <a href="/analysis"
+            class="inline-block mt-8 px-6 py-2 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition duration-200">
+            Voltar
+        </a>
+    </div>
+
 </body>
 
 </html>
