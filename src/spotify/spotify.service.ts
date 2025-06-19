@@ -40,66 +40,82 @@ export class SpotifyService {
     }
 
     async getPlaylist(playlistUrl: string): Promise<any> {
-        const playlistId: string | null = this.extractPlaylistId(playlistUrl);
-        if (!playlistId) {
-            throw new Error('Invalid Spotify playlist URL');
-        }
+        try {
+            const playlistId: string | null = this.extractPlaylistId(playlistUrl);
+            if (!playlistId) {
+                throw new Error('Invalid Spotify playlist URL');
+            }
 
-        const token: string = await this.getSpotifyAccessToken();
-        const url = `${this.SPOTIFY_API_URL}/playlists/${playlistId}`;
+            const token: string = await this.getSpotifyAccessToken();
+            const url = `${this.SPOTIFY_API_URL}/playlists/${playlistId}`;
 
-        const response = await axios.get(url, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
-
-        return response.data;
-    }
-
-    async getPlaylistTracks(playlistUrl: string): Promise<SpotifyTrack[]> {
-        const playlistId: string | null = this.extractPlaylistId(playlistUrl)
-        const token: string = await this.getSpotifyAccessToken()
-        const tracksList: SpotifyTrack[] = [];
-        let url: string = `${this.SPOTIFY_API_URL}/playlists/${playlistId}/tracks`;
-
-        while (url) {
-            const response: any = await axios.get(url, {
+            const response = await axios.get(url, {
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            response.data.items.forEach((item: SpotifyTrack) => {
-                if (item.track) {
-                    tracksList.push(item)
-                }
-            });
-
-            url = response.data.next
+            return response.data;
+        } catch (error) {
+            throw new Error(error)
         }
+    }
 
-        return tracksList.reverse()
+    async getPlaylistTracks(playlistUrl: string): Promise<SpotifyTrack[]> {
+        try {
+            const playlistId: string | null = this.extractPlaylistId(playlistUrl)
+            const token: string = await this.getSpotifyAccessToken()
+            const tracksList: SpotifyTrack[] = [];
+            let url: string = `${this.SPOTIFY_API_URL}/playlists/${playlistId}/tracks`;
+
+            while (url) {
+                const response: any = await axios.get(url, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                response.data.items.forEach((item: SpotifyTrack) => {
+                    if (item.track) {
+                        tracksList.push(item)
+                    }
+                });
+
+                url = response.data.next
+            }
+
+            return tracksList.reverse()
+        } catch (error) {
+            throw new Error(error)
+        }
     }
 
     async getSeveralArtists(ids: string[]): Promise<any[]> {
-        const token = await this.getSpotifyAccessToken();
-        const idsParam = ids.slice(0, 50).join(',')
-        const url = `${this.SPOTIFY_API_URL}/artists?ids=${idsParam}`
+        try {
+            const token = await this.getSpotifyAccessToken();
+            const idsParam = ids.slice(0, 50).join(',')
+            const url = `${this.SPOTIFY_API_URL}/artists?ids=${idsParam}`
 
-        const response = await axios.get(url, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
+            const response = await axios.get(url, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
 
-        return response.data.artists;
+            return response.data.artists;
+        } catch (error) {
+            throw new Error(error)
+        }
     }
 
     async getSeveralAlbums(ids: string[]): Promise<any[]> {
-        const token = await this.getSpotifyAccessToken()
-        const idsParam = ids.slice(0, 20).join(',')
-        const url = `${this.SPOTIFY_API_URL}/albums?ids=${idsParam}`
+        try {
+            const token = await this.getSpotifyAccessToken()
+            const idsParam = ids.slice(0, 20).join(',')
+            const url = `${this.SPOTIFY_API_URL}/albums?ids=${idsParam}`
 
-        const response = await axios.get(url, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
+            const response = await axios.get(url, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
 
-        return response.data.albums;
+            return response.data.albums;
+        } catch (error) {
+            throw new Error(error)
+        }
     }
 
 }
