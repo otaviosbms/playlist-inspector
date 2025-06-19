@@ -2,15 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { SpotifyService } from '../spotify/spotify.service';
 import { SpotifyTrack } from '../types/spotifyTracks';
 import { OpenaiService } from '../openai/openai.service';
-import { calculateAverageDurationInMinutes, calculateDistinctAlbumsCount, calculateDistinctArtistsCount, calculatePlaylistYearDistribution, calculateReleaseYearStats, calculateTop10Albums, calculateTop10Artists, formatPlaylistSummary, formatPrompt, getTop10GenresFromPlaylist } from '../utils';
+import { calculateAverageDurationInMinutes, calculateDistinctAlbumsCount, calculateDistinctArtistsCount, calculatePlaylistYearDistribution, calculateReleaseYearStats, calculateTop10Albums, calculateTop10Artists, formatPlaylistMetadata, formatPlaylistSummary, formatPrompt, getTop10GenresFromPlaylist } from '../utils';
 import { prompt } from '../prompts/prompt';
+import { PlaylistMetadata } from '../types/playlistMetadata';
 
 @Injectable()
 export class AnalysisService {
     constructor(private readonly spotifyService: SpotifyService, private readonly openaiService: OpenaiService) {
     }
 
-    async analizePlaylist(playlistUrl: string) {
+    async analizePlaylist(playlistUrl: string): Promise<Object> {
         const tracks: SpotifyTrack[] = await this.spotifyService.getPlaylistTracks(playlistUrl)
         const playlistInfo: any = await this.spotifyService.getPlaylist(playlistUrl)
 
@@ -30,13 +31,16 @@ export class AnalysisService {
         }
 
         const parsedPlaylistSummary: string = this.createPlaylistSummary(tracks, allArtists)
+        const playlistData: PlaylistMetadata = formatPlaylistMetadata(playlistInfo)
 
+        const aiResponse: string = await this.openaiService.generateAiResponse(formatPrompt(prompt, parsedPlaylistSummary))
 
-        // console.log(formatPrompt(prompt, parsedPlaylistSummary))
+        const recommendationData: Recommendation = JSON.parse(aiResponse)
 
-        // const aiResponse = this.openaiService.generateAiResponse(formatPrompt(prompt, parsedPlaylistSummary))
-
-        return true
+        return {
+            ...playlistData,
+            ...recommendationData
+        }
     }
 
     private createPlaylistSummary(tracks: SpotifyTrack[], allArtists: any[]): string {
