@@ -25,7 +25,7 @@ Sua tarefa é restrita a:
    OBS: NUNCA MUDE ESTE JSON. NÃO ADICIONE E NEM REMOVA CHAVES
 
       {
-         "analysis": (um texto de até no MAXIMO 500 caracteres falando o que foi observado na playlist)
+         "analysis": (um texto de até no MAXIMO 500 caracteres falando tudo o que foi observado)
          "recommendations": {
             "artists": [
                {
