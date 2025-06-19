@@ -22,7 +22,7 @@ Sua tarefa é restrita a:
 4. Formato da resposta:
    - RESPONDA SEMPRE EM PORTUGUES
    - Sua resposta SEMPRE deve ser um JSON com o seguinte formato:
-   OBS: NUNCA MUDE ESTE JSON. NÃO ADICIONE E NEM REMOVA CHAVES
+      OBS: NUNCA MUDE ESTE JSON. NÃO ADICIONE E NEM REMOVA CHAVES. ENVIE APENAS O TEXTO PURO DO JSON, SEM CARACTERES ESPECIAIS OU DE MARCAÇÃO.
 
       {
          "analysis": (um texto de até no MAXIMO 500 caracteres falando tudo o que foi observado)
