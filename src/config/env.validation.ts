@@ -13,5 +13,8 @@ export const envSchema = z.object({
   DEEPSEEK_ENGINE_CHAT: z.string(),
   DEEPSEEK_ENGINE_REASONER: z.string(),
 
+  GPT_API_TOKEN: z.string(),
+  GPT_ENGINE: z.string(),
+
   PORT: z.coerce.number().default(3000),
 });
