@@ -1,3 +1,4 @@
+import { PlaylistMetadata } from "../types/playlistMetadata";
 import { PlaylistSummary } from "../types/playlistSummary";
 import { SpotifyTrack } from "../types/spotifyTracks";
 
@@ -210,3 +211,15 @@ export function calculateReleaseYearStats(tracks: SpotifyTrack[]): {
         latest_year: latest,
     }
 }
+
+export function formatPlaylistMetadata(playlistInfo: any): PlaylistMetadata {
+
+    return {
+        image: playlistInfo.images?.[1]?.url ?? playlistInfo.images?.[0]?.url,
+        playlistName: playlistInfo.name ?? '',
+        playlistDescription: playlistInfo.description ?? '',
+        playlistOwner: playlistInfo.owner?.display_name ?? '',
+        playlistFollowers: playlistInfo.followers?.total ?? 0,
+    };
+}
+
