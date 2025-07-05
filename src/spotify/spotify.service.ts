@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { SpotifyTrack } from '../types/spotifyTracks';
@@ -35,15 +35,28 @@ export class SpotifyService {
     }
 
     private extractPlaylistId(playlistUrl: string) {
-        const match: RegExpMatchArray | null = playlistUrl.match(/playlist\/([a-zA-Z0-9]+)(\?.*)?/);
-        return match ? match[1] : null;
+        const regex: RegExp = /^https?:\/\/(open|play)\.spotify\.com\/playlist\/([a-zA-Z0-9]+)(\?.*)?$/;
+        const match: RegExpMatchArray | null = playlistUrl.match(regex);
+        return match ? match[2] : null;
+    }
+
+    private handleAxiosError(error: any, context: string) {
+        if (error.response) {
+            throw new InternalServerErrorException(
+                `[${context}] Spotify API error: ${error.response.status} - ${JSON.stringify(error.response.data)}`
+            );
+        } else if (error.request) {
+            throw new InternalServerErrorException(`[${context}] No response from Spotify API: ${error.message}`);
+        } else {
+            throw new InternalServerErrorException(`[${context}] Error: ${error.message}`);
+        }
     }
 
     async getPlaylist(playlistUrl: string): Promise<any> {
         try {
             const playlistId: string | null = this.extractPlaylistId(playlistUrl);
             if (!playlistId) {
-                throw new Error('Invalid Spotify playlist URL');
+                throw new BadRequestException('Invalid Spotify playlist URL');
             }
 
             const token: string = await this.getSpotifyAccessToken();
@@ -55,8 +68,9 @@ export class SpotifyService {
 
             return response.data;
         } catch (error) {
-            throw new Error(error)
+            this.handleAxiosError(error, 'getPlaylist');
         }
+        return null;
     }
 
     async getPlaylistTracks(playlistUrl: string): Promise<SpotifyTrack[]> {
@@ -82,8 +96,9 @@ export class SpotifyService {
 
             return tracksList.reverse()
         } catch (error) {
-            throw new Error(error)
+            this.handleAxiosError(error, 'getPlaylistTracks');
         }
+        return [];
     }
 
     async getSeveralArtists(ids: string[]): Promise<any[]> {
@@ -98,8 +113,9 @@ export class SpotifyService {
 
             return response.data.artists;
         } catch (error) {
-            throw new Error(error)
+            this.handleAxiosError(error, 'getSeveralArtists');
         }
+        return [];
     }
 
     async getSeveralAlbums(ids: string[]): Promise<any[]> {
@@ -114,8 +130,9 @@ export class SpotifyService {
 
             return response.data.albums;
         } catch (error) {
-            throw new Error(error)
+            this.handleAxiosError(error, 'getSeveralAlbums');
         }
+        return [];
     }
 
 }
