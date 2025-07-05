@@ -17,4 +17,5 @@ export const envSchema = z.object({
   GPT_ENGINE: z.string(),
 
   PORT: z.coerce.number().default(3000),
+  BEARER_TOKEN: z.string(),
 });

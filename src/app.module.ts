@@ -4,6 +4,8 @@ import { AnalysisModule } from './analysis/analysis.module';
 import { OpenaiModule } from './openai/openai.module';
 import { ConfigModule } from '@nestjs/config';
 import { envSchema } from './config/env.validation';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth.guard';
 
 @Module({
   imports: [
@@ -24,6 +26,11 @@ import { envSchema } from './config/env.validation';
     SpotifyModule, AnalysisModule, OpenaiModule
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule { }
