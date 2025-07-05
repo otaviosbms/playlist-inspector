@@ -21,24 +21,26 @@ export class OpenaiService {
         });
     }
 
-async generateAiResponse(prompt: string, message: string): Promise<string> {
-    const systemMessage: ChatCompletionMessageParam = {
-        role: 'system',
-        content: prompt
-    };
+    async generateAiResponse(prompt: string, message: string): Promise<string> {
+        const systemMessage: ChatCompletionMessageParam = {
+            role: 'system',
+            content: prompt
+        };
 
-    const chatCompletion: any = await this.openai.chat.completions.create({
-        model: this.engine,
-        messages: [
-            systemMessage,
-            { role: 'user', content: message }
-        ],
-        max_tokens: 800
-    });
+        const maxTokens: number = this.config.get<number>('GPT_MAX_TOKENS') || 800;
 
-    console.log('Chat Completion:', chatCompletion);
+        const chatCompletion: any = await this.openai.chat.completions.create({
+            model: this.engine,
+            messages: [
+                systemMessage,
+                { role: 'user', content: message }
+            ],
+            max_tokens: maxTokens
+        });
 
-    return chatCompletion.choices[0].message.content;
-}
+        console.log('Chat Completion:', chatCompletion);
+
+        return chatCompletion.choices[0].message.content;
+    }
 }
 
