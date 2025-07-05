@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources/index';
@@ -22,25 +22,30 @@ export class OpenaiService {
     }
 
     async generateAiResponse(prompt: string, message: string): Promise<string> {
-        const systemMessage: ChatCompletionMessageParam = {
-            role: 'system',
-            content: prompt
-        };
+        try {
+            const systemMessage: ChatCompletionMessageParam = {
+                role: 'system',
+                content: prompt
+            };
 
-        const maxTokens: number = this.config.get<number>('GPT_MAX_TOKENS') || 800;
+            const maxTokens: number = this.config.get<number>('GPT_MAX_TOKENS') || 800;
 
-        const chatCompletion: any = await this.openai.chat.completions.create({
-            model: this.engine,
-            messages: [
-                systemMessage,
-                { role: 'user', content: message }
-            ],
-            max_tokens: maxTokens
-        });
+            const chatCompletion: any = await this.openai.chat.completions.create({
+                model: this.engine,
+                messages: [
+                    systemMessage,
+                    { role: 'user', content: message }
+                ],
+                max_tokens: maxTokens
+            });
 
-        console.log('Chat Completion:', chatCompletion);
+            console.log('Chat Completion:', chatCompletion);
 
-        return chatCompletion.choices[0].message.content;
+            return chatCompletion.choices[0].message.content;
+        } catch (error) {
+            console.error('Erro ao gerar resposta da IA:', error?.response?.data || error.message || error);
+            throw new InternalServerErrorException('Erro ao gerar resposta da IA. Tente novamente mais tarde.');
+        }
     }
 }
 
