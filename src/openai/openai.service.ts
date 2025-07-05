@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import OpenAI from 'openai';
+import { ChatCompletionMessageParam } from 'openai/resources/index';
 
 @Injectable()
 export class OpenaiService {
@@ -20,13 +21,24 @@ export class OpenaiService {
         });
     }
 
-    async generateAiResponse(prompt: string): Promise<string> {
-        const chatCompletion: any = await this.openai.chat.completions.create({
-            model: this.engine,
-            messages: [{ role: 'user', content: prompt }],
-        });
+async generateAiResponse(prompt: string, message: string): Promise<string> {
+    const systemMessage: ChatCompletionMessageParam = {
+        role: 'system',
+        content: prompt
+    };
 
-        return chatCompletion.choices[0].message.content;
-    }
+    const chatCompletion: any = await this.openai.chat.completions.create({
+        model: this.engine,
+        messages: [
+            systemMessage,
+            { role: 'user', content: message }
+        ],
+        max_tokens: 800
+    });
+
+    console.log('Chat Completion:', chatCompletion);
+
+    return chatCompletion.choices[0].message.content;
+}
 }
 

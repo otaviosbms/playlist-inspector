@@ -2,8 +2,8 @@ import { PlaylistMetadata } from "../types/playlistMetadata";
 import { PlaylistSummary } from "../types/playlistSummary";
 import { SpotifyTrack } from "../types/spotifyTracks";
 
-export function formatPrompt(prompt: string, playlistSummary: string): string {
-    prompt = prompt.replace('{playlistSummary}', playlistSummary);
+export function formatPrompt(prompt: string, test: string): string {
+    prompt = prompt.replace('{test}', test);
 
     return prompt
 }
@@ -21,6 +21,8 @@ export function formatPlaylistSummary(data: PlaylistSummary): string {
     };
 
     const summary: string = `
+    Resumo da Playlist:
+
     - Média de tempo em minutos: ${data.average_duration_min.toFixed(2)}
 
     - Quantidade de Artistas diferentes: ${data.distinct_artists_count}

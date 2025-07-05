@@ -52,8 +52,4 @@ Sua tarefa é restrita a:
 
    - Regras adicionais:
 	   Adicione 5 recomendações para cada item.
-   
-Relatório da Playlist:
-
-{playlistSummary}
 `.trim()

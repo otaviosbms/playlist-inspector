@@ -33,7 +33,7 @@ export class AnalysisService {
         const parsedPlaylistSummary: string = this.createPlaylistSummary(tracks, allArtists)
         const playlistData: PlaylistMetadata = formatPlaylistMetadata(playlistInfo)
 
-        const aiResponse: string = await this.openaiService.generateAiResponse(formatPrompt(prompt, parsedPlaylistSummary))
+        const aiResponse: string = await this.openaiService.generateAiResponse(prompt, parsedPlaylistSummary)
 
         const recommendationData: Recommendation = JSON.parse(aiResponse)
 

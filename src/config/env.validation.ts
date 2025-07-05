@@ -18,4 +18,5 @@ export const envSchema = z.object({
 
   PORT: z.coerce.number().default(3000),
   BEARER_TOKEN: z.string(),
+  GPT_MAX_TOKENS: z.coerce.number(),
 });
