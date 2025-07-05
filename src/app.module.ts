@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { envSchema } from './config/env.validation';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
+import { StatusController as AppController } from './status.controller';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { AuthGuard } from './auth.guard';
     }),
     SpotifyModule, AnalysisModule, OpenaiModule
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     {
       provide: APP_GUARD,
