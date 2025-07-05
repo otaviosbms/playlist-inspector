@@ -5,7 +5,7 @@ import { AnalysisService } from './analysis.service';
 export class AnalysisController {
     constructor(private readonly AnalysisService: AnalysisService) { }
 
-    @Post('/api')
+    @Post()
     async getRecommendationsApi(@Body() body: { url: string }) {
         const url: string = body.url;
         const result = await this.AnalysisService.analizePlaylist(url);
