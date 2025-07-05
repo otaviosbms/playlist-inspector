@@ -6,7 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { envSchema } from './config/env.validation';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
-import { StatusController as AppController } from './status.controller';
+import { AppController as AppController } from './app.controller';
 
 @Module({
   imports: [

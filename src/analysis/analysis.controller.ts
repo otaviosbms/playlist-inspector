@@ -12,17 +12,4 @@ export class AnalysisController {
         return { result };
     }
 
-    @Get()
-    @Render('home')
-    showForm() {
-        return {};
-    }
-
-    @Post()
-    @Render('result')
-    async handleForm(@Body() body: { url: string }) {
-        const url: string = body.url
-        const result: Object = await this.AnalysisService.analizePlaylist(url);
-        return { result }
-    }
 }
