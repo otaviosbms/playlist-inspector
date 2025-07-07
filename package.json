@@ -24,12 +24,15 @@
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/typeorm": "^11.0.0",
     "axios": "^1.10.0",
     "dotenv": "^16.5.0",
     "hbs": "^4.2.0",
+    "mysql2": "^3.14.1",
     "openai": "^5.5.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "typeorm": "^0.3.25",
     "zod": "^3.25.67"
   },
   "devDependencies": {

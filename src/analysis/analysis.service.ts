@@ -5,10 +5,18 @@ import { OpenaiService } from '../openai/openai.service';
 import { calculateAverageDurationInMinutes, calculateDistinctAlbumsCount, calculateDistinctArtistsCount, calculatePlaylistYearDistribution, calculateReleaseYearStats, calculateTop10Albums, calculateTop10Artists, formatPlaylistMetadata, formatPlaylistSummary, formatPrompt, getTop10GenresFromPlaylist } from '../utils';
 import { prompt } from '../prompts/prompt';
 import { PlaylistMetadata } from '../types/playlistMetadata';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { TempData } from '../models/entities/temp-data.entity';
 
 @Injectable()
 export class AnalysisService {
-    constructor(private readonly spotifyService: SpotifyService, private readonly openaiService: OpenaiService) {
+    constructor(
+        private readonly spotifyService: SpotifyService,
+        private readonly openaiService: OpenaiService,
+        @InjectRepository(TempData)
+        private readonly tempDataRepository: Repository<TempData>,
+    ) {
     }
 
     async analizePlaylist(playlistUrl: string): Promise<Object> {

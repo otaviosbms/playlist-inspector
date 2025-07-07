@@ -7,6 +7,8 @@ import { envSchema } from './config/env.validation';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
 import { AppController as AppController } from './app.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TempData } from './models/entities/temp-data.entity';
 
 @Module({
   imports: [
@@ -23,6 +25,16 @@ import { AppController as AppController } from './app.controller';
 
         return parsed.data;
       },
+    }),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '',
+      database: 'playlist_inspector',
+      entities: [TempData],
+      synchronize: true, // use apenas em desenvolvimento
     }),
     SpotifyModule, AnalysisModule, OpenaiModule
   ],
