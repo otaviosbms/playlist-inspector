@@ -8,6 +8,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
 import { AppController as AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 import { TempData } from './models/entities/temp-data.entity';
 
 @Module({
@@ -26,15 +27,18 @@ import { TempData } from './models/entities/temp-data.entity';
         return parsed.data;
       },
     }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '',
-      database: 'playlist_inspector',
-      entities: [TempData],
-      synchronize: true, // use apenas em desenvolvimento
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'mysql',
+        host: config.getOrThrow<string>('MYSQL_HOST'),
+        port: config.getOrThrow<number>('MYSQL_PORT'),
+        username: config.getOrThrow<string>('MYSQL_USER'),
+        password: config.getOrThrow<string>('MYSQL_PASSWORD'),
+        database: config.getOrThrow<string>('MYSQL_DATABASE'),
+        entities: [TempData],
+        synchronize: true, // use apenas em desenvolvimento
+      }),
     }),
     SpotifyModule, AnalysisModule, OpenaiModule
   ],

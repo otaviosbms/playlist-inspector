@@ -19,4 +19,10 @@ export const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
   BEARER_TOKEN: z.string(),
   GPT_MAX_TOKENS: z.coerce.number(),
+
+  MYSQL_HOST: z.string(),
+  MYSQL_PORT: z.coerce.number().default(3306),
+  MYSQL_USER: z.string(),
+  MYSQL_PASSWORD: z.string(),
+  MYSQL_DATABASE: z.string(),
 });
